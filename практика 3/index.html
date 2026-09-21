@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Домашние задачи · JavaScript</title>
+    <style>
+        /* ===== Базовое ===== */
+        :root {
+            --bg:         #1a1915;
+            --bg-elev:    #23221d;
+            --border:     #33322c;
+            --border-dim: #2a2925;
+            --text:       #e8e6e0;
+            --text-dim:   #8a8780;
+            --text-mute:  #5c5a54;
+            --accent:     #d97757;   /* терракотовый, как в Claude */
+            --accent-dim: #b85f45;
+            --green:      #7fb069;
+            --red:        #d97757;
+            --yellow:     #d4a857;
+            --blue:       #7a9cc6;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'SF Mono', 'Monaco', 'Consolas', 'Liberation Mono', monospace;
+            font-size: 13.5px;
+            line-height: 1.6;
+            padding: 24px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .terminal {
+            width: 100%;
+            max-width: 780px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        /* ===== Заголовок окна ===== */
+        .titlebar {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 16px;
+            background: var(--bg-elev);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .dots {
+            display: flex;
+            gap: 6px;
+        }
+
+        .dot {
+            width: 11px;
+            height: 11px;
+            border-radius: 50%;
+            background: var(--border);
+        }
+        .dot.red    { background: #4a3a35; }
+        .dot.yellow { background: #4a4435; }
+        .dot.green  { background: #354a37; }
+
+        .title {
+            color: var(--text-dim);
+            font-size: 12px;
+            flex: 1;
+            text-align: center;
+            margin-right: 35px;
+        }
+
+        /* ===== Тело ===== */
+        .body {
+            padding: 20px 24px 24px;
+        }
+
+        /* ===== Приветствие ===== */
+        .prompt-line {
+            color: var(--text-dim);
+            margin-bottom: 4px;
+        }
+
+        .prompt-line .symbol {
+            color: var(--accent);
+            margin-right: 8px;
+        }
+
+        .prompt-line .path {
+            color: var(--blue);
+        }
+
+        .hint {
+            color: var(--text-mute);
+            margin-bottom: 24px;
+            font-size: 12.5px;
+        }
+
+        /* ===== Список задач ===== */
+        .task {
+            display: flex;
+            align-items: baseline;
+            gap: 12px;
+            padding: 6px 0;
+            cursor: pointer;
+            border: none;
+            background: none;
+            color: var(--text);
+            font: inherit;
+            text-align: left;
+            width: 100%;
+            transition: color 0.12s ease;
+        }
+
+        .task:hover .task-name {
+            color: var(--accent);
+        }
+
+        .task:hover .task-marker {
+            color: var(--accent);
+        }
+
+        .task-marker {
+            color: var(--text-mute);
+            transition: color 0.12s ease;
+            user-select: none;
+            flex-shrink: 0;
+        }
+
+        .task-name {
+            flex: 1;
+            transition: color 0.12s ease;
+        }
+
+        .task-name .num {
+            color: var(--text-mute);
+            margin-right: 4px;
+        }
+
+        .task-hint {
+            color: var(--text-mute);
+            font-size: 12px;
+        }
+
+        /* ===== Разделитель ===== */
+        .divider {
+            height: 1px;
+            background: var(--border-dim);
+            margin: 20px 0 16px;
+        }
+
+        /* ===== Вывод ===== */
+        .output-label {
+            color: var(--text-mute);
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 10px;
+        }
+
+        #output {
+            font-family: inherit;
+            font-size: 13px;
+            line-height: 1.7;
+            color: var(--text);
+            white-space: pre-wrap;
+            word-break: break-word;
+            min-height: 80px;
+        }
+
+        #output:empty::before {
+            content: "нет вывода";
+            color: var(--text-mute);
+            font-style: italic;
+        }
+
+        .line        { display: block; }
+        .line-info   { color: var(--text-dim); }
+        .line-ok     { color: var(--green); }
+        .line-err    { color: var(--red); }
+        .line-warn   { color: var(--yellow); }
+        .line-accent { color: var(--accent); }
+
+        /* ===== Футер ===== */
+        .footer {
+            border-top: 1px solid var(--border-dim);
+            padding: 10px 24px;
+            display: flex;
+            justify-content: space-between;
+            color: var(--text-mute);
+            font-size: 11.5px;
+            background: var(--bg-elev);
+        }
+
+        .footer kbd {
+            font-family: inherit;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 3px;
+            padding: 1px 5px;
+            font-size: 10.5px;
+            color: var(--text-dim);
+        }
+
+        .clear-link {
+            background: none;
+            border: none;
+            color: var(--text-mute);
+            font: inherit;
+            font-size: 11.5px;
+            cursor: pointer;
+            padding: 0;
+            transition: color 0.12s ease;
+        }
+        .clear-link:hover {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="terminal">
+        <!-- Заголовок в стиле macOS терминала -->
+        <div class="titlebar">
+            <div class="dots">
+                <span class="dot red"></span>
+                <span class="dot yellow"></span>
+                <span class="dot green"></span>
+            </div>
+            <span class="title">~/homework — javascript</span>
+        </div>
+
+        <div class="body">
+            <!-- Строка приглашения -->
+            <div class="prompt-line">
+                <span class="symbol">›</span>
+                <span class="path">~/homework</span>
+            </div>
+            <div class="hint">выбери задачу для запуска</div>
+
+            <!-- Список задач -->
+            <button class="task" onclick="runTask1()">
+                <span class="task-marker">[1]</span>
+                <span class="task-name">Таблица умножения</span>
+                <span class="task-hint">число 2–10</span>
+            </button>
+
+            <button class="task" onclick="runTask2()">
+                <span class="task-marker">[2]</span>
+                <span class="task-name">Подсчёт карт VISA</span>
+                <span class="task-hint">массив карт</span>
+            </button>
+
+            <button class="task" onclick="runTask3()">
+                <span class="task-marker">[3]</span>
+                <span class="task-name">Лояльность «Газпром»</span>
+                <span class="task-hint">silver / gold / platinum</span>
+            </button>
+
+            <button class="task" onclick="runTask4()">
+                <span class="task-marker">[4]</span>
+                <span class="task-name">getRange(start, end, step)</span>
+                <span class="task-hint">диапазон чисел</span>
+            </button>
+
+            <button class="task" onclick="runTask5()">
+                <span class="task-marker">[5]</span>
+                <span class="task-name">myReverse(str)</span>
+                <span class="task-hint">переворот строки без .reverse()</span>
+            </button>
+
+            <button class="task" onclick="runTask6()">
+                <span class="task-marker">[6]</span>
+                <span class="task-name">maskCard(номер, символ)</span>
+                <span class="task-hint">маска номера карты</span>
+            </button>
+
+            <div class="divider"></div>
+
+            <!-- Вывод -->
+            <div class="output-label">output</div>
+            <pre id="output"></pre>
+        </div>
+
+        <div class="footer">
+            <span>готов · нажми на задачу</span>
+            <button class="clear-link" onclick="clearOutput()">очистить вывод</button>
+        </div>
+    </div>
+
+    <script>
+        /* ===== Утилиты вывода ===== */
+        const output = document.getElementById("output");
+
+        function log(text, type = "") {
+            const span = document.createElement("span");
+            span.className = "line" + (type ? " line-" + type : "");
+            span.textContent = text + "\n";
+            output.appendChild(span);
+            // автоскролл контейнера, если он ограничен
+            output.scrollIntoView({ block: "nearest" });
+        }
+
+        function clearOutput() {
+            output.textContent = "";
+        }
+
+        /* ===================================================
+           ЗАДАЧА 1 — Таблица умножения
+        =================================================== */
+        function runTask1() {
+            clearOutput();
+            log("$ задача 1: таблица умножения", "accent");
+
+            const input = prompt("Введите число от 2 до 10:");
+            if (input === null) {
+                log("✖ ввод отменён", "err");
+                return;
+            }
+
+            const number = Number(input);
+            if (isNaN(number)) {
+                log("✖ это не число", "err");
+                return;
+            }
+
+            if (number < 2 || number > 10) {
+                log("✖ число должно быть от 2 до 10", "err");
+                return;
+            }
+
+            for (let i = 1; i <= 10; i++) {
+                log(`${number} × ${i} = ${number * i}`);
+            }
+            log("✔ готово", "ok");
+        }
+
+        /* ===================================================
+           ЗАДАЧА 2 — Подсчёт карт VISA
+        =================================================== */
+        function runTask2() {
+            clearOutput();
+            log("$ задача 2: подсчёт карт VISA", "accent");
+
+            const cards = [
+                "46782346", "45781218", "79874568", "12157845",
+                "36151845", "41250895", "41201961"
+            ];
+
+            log("массив: " + cards.join(" "), "info");
+
+            let visaCount = 0;
+            for (const card of cards) {
+                if (card.startsWith("4")) visaCount++;
+            }
+
+            log(`Карт VISA ${visaCount} из ${cards.length}`, "ok");
+        }
+
+        /* ===================================================
+           ЗАДАЧА 3 — Система лояльности «Газпром»
+        =================================================== */
+        function runTask3() {
+            clearOutput();
+            log("$ задача 3: лояльность «Газпром»", "accent");
+
+            const cardInput = prompt("Введите тип карты (SILVER / GOLD / PLATINUM):");
+            if (cardInput === null) {
+                log("✖ ввод отменён", "err");
+                return;
+            }
+
+            const cardType = cardInput.trim().toUpperCase();
+            const litersInput = prompt("Введите количество литров:");
+            if (litersInput === null) {
+                log("✖ ввод отменён", "err");
+                return;
+            }
+
+            const liters = Number(litersInput);
+            if (isNaN(liters) || liters <= 0) {
+                log("✖ некорректное количество литров", "err");
+                return;
+            }
+
+            let rate;
+            if (cardType === "SILVER")        rate = 0.5;
+            else if (cardType === "GOLD")     rate = 0.75;
+            else if (cardType === "PLATINUM") rate = 1;
+            else {
+                log(`✖ неизвестный тип карты: ${cardType}`, "err");
+                return;
+            }
+
+            const points = liters * rate;
+            log(`карта        ${cardType}`, "info");
+            log(`литров       ${liters}`, "info");
+            log(`коэффициент  ${rate} балла/литр`, "info");
+            log(`итого        ${points} баллов`, "ok");
+        }
+
+        /* ===================================================
+           ЗАДАЧА 4 — getRange(start, end, step = 1)
+           Генерирует массив чисел в диапазоне [start; end]
+           с заданным шагом (по умолчанию 1).
+        =================================================== */
+        function getRange(start, end, step = 1) {
+            const result = [];
+            for (let i = start; i <= end; i += step) {
+                result.push(i);
+            }
+            return result;
+        }
+
+        function runTask4() {
+            clearOutput();
+            log("$ задача 4: getRange(start, end, step)", "accent");
+
+            const startInput = prompt("Введите начало диапазона:");
+            if (startInput === null) {
+                log("✖ ввод отменён", "err");
+                return;
+            }
+
+            const endInput = prompt("Введите конец диапазона:");
+            if (endInput === null) {
+                log("✖ ввод отменён", "err");
+                return;
+            }
+
+            // поле уже заполнено значением "1" — можно просто нажать OK
+            const stepInput = prompt("Введите шаг:", "1");
+            if (stepInput === null) {
+                log("✖ ввод отменён", "err");
+                return;
+            }
+
+            const start = Number(startInput);
+            const end = Number(endInput);
+            const step = stepInput.trim() === "" ? 1 : Number(stepInput);
+
+            if (isNaN(start) || isNaN(end) || isNaN(step)) {
+                log("✖ все значения должны быть числами", "err");
+                return;
+            }
+            if (step <= 0) {
+                log("✖ шаг должен быть положительным числом", "err");
+                return;
+            }
+            if (start > end) {
+                log("✖ начало диапазона больше конца", "err");
+                return;
+            }
+
+            const range = getRange(start, end, step);
+            log(`getRange(${start}, ${end}, ${step})`, "info");
+            log(`[${range.join(", ")}]`, "ok");
+        }
+
+        /* ===================================================
+           ЗАДАЧА 5 — myReverse(str)
+           Переворот строки без встроенного .reverse().
+           Цикл идёт с конца строки в начало через i--.
+        =================================================== */
+        function myReverse(str) {
+            let result = "";
+            for (let i = str.length - 1; i >= 0; i--) {
+                result += str[i];
+            }
+            return result;
+        }
+
+        function runTask5() {
+            clearOutput();
+            log("$ задача 5: myReverse(str)", "accent");
+
+            const input = prompt("Введите строку для переворота:");
+            if (input === null) {
+                log("✖ ввод отменён", "err");
+                return;
+            }
+
+            const reversed = myReverse(input);
+            log(`myReverse("${input}")`, "info");
+            log(`"${reversed}"`, "ok");
+        }
+
+        /* ===================================================
+           ЗАДАЧА 6 — maskCard(cardNumber, maskChar = "X")
+           Показывает первые 6 и последние 4 символа,
+           остальное закрывает символом maskChar.
+        =================================================== */
+        function maskCard(cardNumber, maskChar = "X") {
+            const visibleStart = 6;
+            const visibleEnd = 4;
+
+            if (cardNumber.length <= visibleStart + visibleEnd) {
+                return cardNumber; // номер слишком короткий, маскировать нечего
+            }
+
+            const start = cardNumber.slice(0, visibleStart);
+            const end = cardNumber.slice(-visibleEnd);
+            const hiddenLength = cardNumber.length - visibleStart - visibleEnd;
+            const masked = maskChar.repeat(hiddenLength);
+
+            return start + masked + end;
+        }
+
+        function runTask6() {
+            clearOutput();
+            log("$ задача 6: maskCard(номер, символ)", "accent");
+
+            const cardInput = prompt("Введите номер карты:");
+            if (cardInput === null) {
+                log("✖ ввод отменён", "err");
+                return;
+            }
+
+            // поле уже заполнено значением "X" — можно просто нажать OK
+            const maskInput = prompt("Символ маскировки:", "X");
+            if (maskInput === null) {
+                log("✖ ввод отменён", "err");
+                return;
+            }
+
+            const card = cardInput.trim();
+            const maskChar = maskInput.trim() === "" ? "X" : maskInput.trim();
+
+            const masked = maskCard(card, maskChar);
+            log(`maskCard("${card}", "${maskChar}")`, "info");
+            log(masked, "ok");
+        }
+    </script>
+</body>
+</html>

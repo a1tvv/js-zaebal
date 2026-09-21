@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Counter</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background: linear-gradient(135deg, #1e293b, #0f172a);
+  }
+  .counter {
+    background: #ffffff;
+    border-radius: 24px;
+    padding: 40px 50px;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+    min-width: 320px;
+  }
+  .counter h1 {
+    margin: 0 0 20px;
+    font-size: 20px;
+    font-weight: 600;
+    color: #64748b;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+  .value {
+    font-size: 96px;
+    font-weight: 700;
+    margin: 10px 0 30px;
+    transition: color .25s ease;
+    line-height: 1;
+  }
+  .value.positive { color: #16a34a; }
+  .value.zero     { color: #94a3b8; }
+  .value.negative { color: #dc2626; }
+
+  .buttons {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+  }
+  button {
+    border: none;
+    border-radius: 14px;
+    font-size: 22px;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 14px 22px;
+    color: #fff;
+    transition: transform .1s ease, filter .2s ease;
+  }
+  button:hover  { filter: brightness(1.1); }
+  button:active { transform: scale(0.95); }
+
+  .btn-inc { background: #16a34a; }
+  .btn-dec { background: #dc2626; }
+  .btn-reset {
+    background: #64748b;
+    font-size: 16px;
+    padding: 14px 20px;
+  }
+</style>
+</head>
+<body>
+
+<div class="counter">
+  <h1>Counter</h1>
+  <div class="value zero" id="value">0</div>
+  <div class="buttons">
+    <button class="btn-dec"   id="dec">−</button>
+    <button class="btn-reset" id="reset">Сброс</button>
+    <button class="btn-inc"   id="inc">+</button>
+  </div>
+</div>
+
+<script>
+  const valueEl = document.getElementById('value');
+  let count = 0;
+
+  function render() {
+    valueEl.textContent = count;
+    valueEl.classList.remove('positive', 'zero', 'negative');
+
+    if (count > 0)      valueEl.classList.add('positive');
+    else if (count < 0) valueEl.classList.add('negative');
+    else                valueEl.classList.add('zero');
+  }
+
+  document.getElementById('inc').addEventListener('click', () => {
+    count++;
+    render();
+  });
+
+  document.getElementById('dec').addEventListener('click', () => {
+    count--;
+    render();
+  });
+
+  document.getElementById('reset').addEventListener('click', () => {
+    count = 0;
+    render();
+  });
+
+  render();
+</script>
+
+</body>
+</html>

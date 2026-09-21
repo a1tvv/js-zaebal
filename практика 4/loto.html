@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Лото</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background: radial-gradient(circle at top, #312e81, #0f172a 70%);
+    color: #fff;
+  }
+  .lotto {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(8px);
+    border-radius: 24px;
+    padding: 40px 50px;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    max-width: 560px;
+    width: 100%;
+  }
+  .lotto h1 {
+    margin: 0 0 8px;
+    font-size: 26px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #c7d2fe;
+  }
+  .lotto p.subtitle {
+    margin: 0 0 28px;
+    color: #94a3b8;
+    font-size: 14px;
+  }
+  .balls {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+    margin-bottom: 30px;
+    min-height: 200px;
+    align-content: center;
+    justify-items: center;
+  }
+  .ball {
+    width: 84px;
+    height: 84px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+    font-weight: 700;
+    color: #1e293b;
+    background: radial-gradient(circle at 30% 25%, #ffffff, #c7d2fe 70%);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4),
+                inset 0 -4px 8px rgba(99, 102, 241, 0.35);
+    animation: pop .35s ease backwards;
+  }
+  @keyframes pop {
+    from { transform: scale(0.3); opacity: 0; }
+    to   { transform: scale(1);   opacity: 1; }
+  }
+  .btn-generate {
+    border: none;
+    border-radius: 14px;
+    padding: 16px 36px;
+    font-size: 17px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    color: #fff;
+    cursor: pointer;
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    box-shadow: 0 10px 25px rgba(99, 102, 241, 0.45);
+    transition: transform .1s ease, filter .2s ease;
+  }
+  .btn-generate:hover  { filter: brightness(1.1); }
+  .btn-generate:active { transform: scale(0.96); }
+</style>
+</head>
+<body>
+
+<div class="lotto">
+  <h1>🎲 Лото</h1>
+  <p class="subtitle">6 случайных чисел от 01 до 99</p>
+  <div class="balls" id="balls"></div>
+  <button class="btn-generate" id="generate">Генерировать</button>
+</div>
+
+<script>
+  function getRandomInt(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+
+  const ballsEl = document.getElementById('balls');
+
+  function generate() {
+    ballsEl.innerHTML = ''; // очищаем контейнер
+
+    for (let i = 0; i < 6; i++) {
+      const num = getRandomInt(1, 99);
+      // padStart добавляет ведущий ноль: 5 -> "05", 25 -> "25"
+      const formatted = String(num).padStart(2, '0');
+
+      const ball = document.createElement('div');
+      ball.className = 'ball';
+      ball.textContent = formatted;
+      ball.style.animationDelay = (i * 0.07) + 's'; // лёгкая каскадная анимация
+
+      ballsEl.appendChild(ball);
+    }
+  }
+
+  document.getElementById('generate').addEventListener('click', generate);
+</script>
+
+</body>
+</html>
