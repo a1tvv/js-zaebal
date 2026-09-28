@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Авторизация</title>
+  <style>
+    :root {
+      --bg: #14202b;
+      --panel: #f3efe6;
+      --ink: #14202b;
+      --muted: #5d6b78;
+      --line: #c9c3b4;
+      --accent: #1f6f6b;
+      --ok: #1f6f3d;
+      --err: #a3332b;
+    }
+    * { box-sizing: border-box; }
+    html, body { 
+        height: 100%; 
+        margin: 0; 
+    }
+    body {
+      background: var(--bg);
+      font-family: "Trebuchet MS", "Segoe UI", Tahoma, sans-serif;
+      color: var(--ink);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .card {
+      width: 100%;
+      max-width: 400px;
+      background: var(--panel);
+      border-radius: 6px;
+      padding: 32px 28px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, .35);
+    }
+    h1 { 
+        margin: 0 0 4px; 
+        font-size: 26px; 
+    }
+    .sub { 
+        margin: 0 0 24px; 
+        color: var(--muted); 
+        font-size: 14px; 
+    }
+
+    label { 
+        display: block; 
+        font-size: 14px; 
+        margin-bottom: 6px; 
+    }
+    input {
+      width: 100%;
+      padding: 11px 12px;
+      margin-bottom: 16px;
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      background: #fff;
+      font-size: 16px;
+      color: var(--ink);
+    }
+    input:focus-visible, button:focus-visible {
+      outline: 3px solid var(--accent);
+      outline-offset: 1px;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      border: 0;
+      border-radius: 4px;
+      background: var(--accent);
+      color: #fff;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    button:hover { 
+        filter: brightness(1.1); 
+    }
+    .msg {
+      margin-top: 18px;
+      padding: 12px 14px;
+      border-radius: 4px;
+      font-size: 15px;
+      display: none;
+    }
+    .msg.ok  { display: block; background: #dcefe3; color: var(--ok);  border-left: 4px solid var(--ok); }
+    .msg.err { display: block; background: #f5dcd9; color: var(--err); border-left: 4px solid var(--err); }
+    .hint { margin-top: 22px; font-size: 12px; color: var(--muted); }
+  </style>
+</head>
+<body>
+  <main class="card">
+    <h1>Вход в систему</h1>
+    <p class="sub">Введите логин и пароль</p>
+
+    <form id="loginForm" autocomplete="off">
+      <label for="login">Логин</label>
+      <input id="login" type="text" required>
+
+      <label for="password">Пароль</label>
+      <input id="password" type="password" required>
+
+      <button type="submit">Войти</button>
+    </form>
+
+    <div id="message" class="msg" role="status" aria-live="polite"></div>
+
+    <p class="hint">Тестовый вход: login <b>altay</b> / пароль <b>1234</b></p>
+  </main>
+
+  <script>
+    const users = [
+      { login: "altay",    password: "1234",    name: "Алтай" }
+    ];
+
+    const form = document.getElementById("loginForm");
+    const message = document.getElementById("message");
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const login = document.getElementById("login").value.trim();
+      const password = document.getElementById("password").value;
+
+      const user = users.find(function (u) {
+        return u.login === login && u.password === password;
+      });
+
+      if (user) {
+        message.className = "msg ok";
+        message.textContent = "Авторизация успешна. Добро пожаловать, " + user.name + "!";
+      } else {
+        message.className = "msg err";
+        message.textContent = "Ошибка: неверный логин или пароль.";
+      }
+    });
+  </script>
+</body>
+</html>
