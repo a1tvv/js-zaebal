@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Задание 1</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 640px; margin: 30px auto; padding: 0 16px; }
+    button { display: block; width: 100%; padding: 10px; margin-bottom: 8px; font-size: 15px; cursor: pointer; }
+    p { color: #555; }
+  </style>
+</head>
+<body>
+  <h1>Задание 1</h1>
+  <p>Нажимайте кнопки. Результат смотрите в консоли (F12 → Console).</p>
+
+  <button onclick="task1()">1. Объект студента</button>
+  <button onclick="task2()">2. Объект банковского счёта</button>
+  <button onclick="task3()">3. Приветствие</button>
+  <button onclick="task4()">4. Какое число больше</button>
+  <button onclick="task5()">5. Светофор</button>
+  <button onclick="task6()">6. Конвертер в римские цифры</button>
+  <button onclick="task7()">7. Таблица умножения</button>
+  <button onclick="task8()">8. Карты VISA</button>
+
+  <script>
+    // 1. Объект студента
+    const student = {
+      firstName: "Алтай",
+      lastName: "Абдурахим",
+      group: "IT-125",
+      currentMonth: 3,
+      isGraduate: false,
+      direction: "IT",
+      monthsPassed: 2
+    };
+
+    // 2. Объект банковского счёта
+    const bankAccount = {
+      number: "KZ1234567890",
+      currency: "KZT",
+      balance: 150000,
+      ownerName: "Алтай Абдурахим",
+      isBlocked: false
+    };
+
+    function task1() {
+      console.log("Студент:", student);
+    }
+
+    function task2() {
+      console.log("Банковский счёт:", bankAccount);
+    }
+
+    // 3. Приветствие
+    function task3() {
+      const name = prompt("Введите имя:");
+      const surname = prompt("Введите фамилию:");
+      console.log("Здравствуйте, " + name + " " + surname + "!");
+    }
+
+    // 4. Какое число больше
+    function task4() {
+      const number1 = Number(prompt("Введите первое число:"));
+      const number2 = Number(prompt("Введите второе число:"));
+
+      if (number1 > number2) {
+        console.log("Больше число " + number1);
+      } else if (number2 > number1) {
+        console.log("Больше число " + number2);
+      } else {
+        console.log("Числа равны");
+      }
+    }
+
+    // 5. Светофор
+    function task5() {
+      const color = prompt("Введите цвет светофора:").trim().toLowerCase();
+
+      switch (color) {
+        case "красный":
+          console.log("Красный: стой!");
+          break;
+        case "жёлтый":
+        case "желтый":
+          console.log("Жёлтый: жди!");
+          break;
+        case "зелёный":
+        case "зеленый":
+          console.log("Зелёный: иди!");
+          break;
+        default:
+          console.log("Неизвестный цвет");
+      }
+    }
+
+    // 6. Конвертер в римские цифры (1-9)
+    function task6() {
+      const num = Number(prompt("Введите число от 1 до 9:"));
+      const roman = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX"];
+
+      if (Number.isInteger(num) && num >= 1 && num <= 9) {
+        console.log(num + " -> " + roman[num - 1]);
+      } else {
+        console.log("Ошибка: нужно целое число от 1 до 9");
+      }
+    }
+
+    // 7. Таблица умножения
+    function task7() {
+      const n = Number(prompt("Введите число от 2 до 10:"));
+
+      if (Number.isInteger(n) && n >= 2 && n <= 10) {
+        for (let i = 1; i <= 10; i++) {
+          console.log(n + " × " + i + " = " + n * i);
+        }
+      } else {
+        console.log("Ошибка: нужно число от 2 до 10");
+      }
+    }
+
+    // 8. Подсчёт карт VISA
+    function task8() {
+      const cards = ["46782346", "45781218", "79874568", "12157845", "36151845", "41250895", "41201961"];
+      let visaCount = 0;
+
+      for (let i = 0; i < cards.length; i++) {
+        if (cards[i][0] === "4") {
+          visaCount++;
+        }
+      }
+
+      const message = "Карт VISA " + visaCount + " из " + cards.length;
+      console.log(message);
+      alert(message);
+    }
+  </script>
+</body>
+</html>
