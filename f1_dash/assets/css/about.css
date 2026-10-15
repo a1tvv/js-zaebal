@@ -1,0 +1,8 @@
+.about-grid { display: grid; grid-template-columns: 1.2fr .8fr; gap: 18px; }
+.about-panel { padding: 24px; }
+.about-panel h2 { margin: 0 0 12px; font: 700 27px/1 var(--display); text-transform: uppercase; }
+.stack-list { display: grid; gap: 10px; padding: 0; list-style: none; }
+.stack-list li { display: flex; justify-content: space-between; gap: 12px; padding-bottom: 10px; border-bottom: 1px solid var(--line); }
+.stack-list span { color: var(--muted); text-align: right; }
+.about-callout { margin-top: 18px; padding: 18px; border-left: 3px solid var(--red); background: #1a1719; }
+@media(max-width: 680px) { .about-grid { grid-template-columns: 1fr; } }

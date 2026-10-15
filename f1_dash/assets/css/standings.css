@@ -1,0 +1,11 @@
+.standings-tabs { display: flex; gap: 8px; margin: 24px 0 16px; }
+.standings-table { width: 100%; border-collapse: collapse; text-align: left; }
+.standings-table th { color: var(--muted); font-size: 12px; font-weight: 600; text-transform: uppercase; }
+.standings-table th, .standings-table td { padding: 13px 16px; border-bottom: 1px solid var(--line); }
+.standings-table tbody tr:hover { background: var(--surface-raised); }
+.standing-pos { color: var(--muted); font: 700 20px/1 var(--display); }
+.standing-driver { font-weight: 700; }
+.standing-team { color: var(--muted); }
+.points { font-weight: 700; text-align: right; }
+.driver-table-wrap { overflow-x: auto; }
+@media (max-width: 560px) { .standings-table th, .standings-table td { padding: 11px 9px; font-size: 13px; } }

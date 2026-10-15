@@ -1,0 +1,9 @@
+.race-list { display: grid; gap: 10px; }
+.race-row { display: grid; grid-template-columns: 66px 1.1fr 1fr 140px; align-items: center; gap: 16px; padding: 17px 20px; }
+.race-round { color: var(--red); font: 700 26px/1 var(--display); }
+.race-row h2 { margin: 0; font: 700 22px/1.1 var(--display); text-transform: uppercase; }
+.race-row p { margin: 3px 0 0; color: var(--muted); font-size: 13px; }
+.race-date { font-weight: 600; }
+.race-state { justify-self: end; padding: 5px 10px; border-radius: 20px; background: #20232a; color: #c4c7ce; font-size: 12px; }
+.race-state.done { color: var(--green); }
+@media(max-width: 650px) { .race-row { grid-template-columns: 42px 1fr auto; gap: 10px; padding: 14px; }.race-country { grid-column: 2; }.race-state { grid-column: 3; grid-row: 1; }.race-date { grid-column: 2/4; font-size: 13px; } }

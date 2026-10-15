@@ -1,0 +1,7 @@
+.radio-feed { display: grid; gap: 12px; max-width: 850px; }
+.radio-item { display: grid; grid-template-columns: 84px 1fr; gap: 16px; padding: 18px; }
+.radio-time { color: var(--orange); font: 700 22px/1 var(--display); }
+.radio-item h2 { margin: 0 0 5px; font: 700 20px/1.1 var(--display); }
+.radio-item p { margin: 0; color: #c7c9cf; }
+.radio-tag { display: inline-block; margin-top: 10px; color: var(--muted); font-size: 12px; }
+@media(max-width: 480px) { .radio-item { grid-template-columns: 1fr; gap: 8px; } }

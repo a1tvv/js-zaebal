@@ -1,0 +1,11 @@
+.driver-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+.driver-card { overflow: hidden; }
+.driver-photo { height: 210px; display: grid; place-items: center; background: linear-gradient(145deg, var(--team), #15171c 74%); color: rgb(255 255 255 / 76%); font: 800 100px/.9 var(--display); }
+.driver-info { padding: 16px; }
+.driver-info h2 { margin: 4px 0; font: 700 24px/1 var(--display); }
+.driver-number { float: right; color: var(--team); font: 700 30px/1 var(--display); }
+.driver-team { color: var(--muted); font-size: 13px; }
+.driver-stat { display: flex; justify-content: space-between; margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--line); font-size: 13px; }
+@media (max-width: 900px) { .driver-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 650px) { .driver-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 420px) { .driver-grid { grid-template-columns: 1fr; } }

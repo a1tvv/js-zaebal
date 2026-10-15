@@ -1,0 +1,6 @@
+.telemetry-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.chart-card { padding: 20px; }
+.chart-card h2 { margin: 0 0 18px; font: 700 23px/1 var(--display); text-transform: uppercase; }
+.chart-wrap { position: relative; height: 260px; }
+.telemetry-note { margin-top: 20px; padding: 16px; border-left: 3px solid var(--orange); background: var(--surface); color: var(--muted); }
+@media (max-width: 700px) { .telemetry-grid { grid-template-columns: 1fr; }.chart-wrap { height: 230px; } }

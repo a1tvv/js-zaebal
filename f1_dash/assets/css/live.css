@@ -1,0 +1,2 @@
+.top { padding-inline: max(20px, calc((100vw - var(--page-width)) / 2)); }
+@media (max-width: 850px) { .top { padding-inline: 16px; } }

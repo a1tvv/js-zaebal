@@ -1,0 +1,14 @@
+<!doctype html>
+<html lang="ru">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>О проекте — F1 Paddock</title><link rel="stylesheet" href="../assets/css/style.css"><link rel="stylesheet" href="../assets/css/about.css"></head>
+<body>
+  <header class="site-header"><a class="brand" href="index.html"><span class="brand-mark">F1</span><span>PADDOCK<span class="brand-sub">RACE CONTROL</span></span></a><nav class="site-nav" aria-label="Основная навигация"><a href="index.html">Главная</a><a href="live.html">Live Timing</a><a href="teams.html">Команды</a><a href="drivers.html">Пилоты</a><a href="calendar.html">Календарь</a><a href="standings.html">Зачёт</a><a href="telemetry.html">Телеметрия</a><a href="radio.html">Радио</a><a href="history.html">История</a><a class="active" href="about.html">О проекте</a></nav></header>
+  <main class="container section"><span class="eyebrow">Университетский pet-проект</span><h1 class="page-title">О проекте</h1><p class="muted">Небольшой самостоятельный фронтенд о Формуле-1 — от гоночного контроля до истории чемпионата.</p>
+    <div class="about-grid" style="margin-top:28px">
+      <section class="card about-panel"><h2>Задача</h2><p>Показать, что многополосный сайт с интерактивным Live Timing можно собрать на обычных веб-технологиях. Статические страницы отображают материалы о сезоне, а live-раздел получает обновления с HTTP API.</p><p class="muted">Серверная часть на C++ остаётся отдельным компонентом и отвечает за выдачу JSON.</p><div class="about-callout">Главная фишка — гоночная таблица с позициями, погодой, состоянием трассы и схемой круга.</div></section>
+      <section class="card about-panel"><h2>Технологии</h2><ul class="stack-list"><li>Разметка <span>HTML5</span></li><li>Стили <span>CSS Grid + Flexbox</span></li><li>Интерактивность <span>Vanilla JavaScript</span></li><li>Графики <span>Chart.js CDN</span></li><li>Данные гонки <span>Fetch API + JSON</span></li><li>Сервер <span>C++ HTTP API</span></li></ul></section>
+      <section class="card about-panel"><h2>Автор</h2><p>Студенческий проект</p><p class="muted">Добавь здесь своё имя, группу и контактные данные перед защитой проекта.</p></section>
+      <section class="card about-panel"><h2>Запуск локально</h2><p>Открой папку проекта в редакторе и запусти статический сервер (например, Live Server). Чтобы проверить обновление данных, подключи C++ API и укажи его адрес в Live Timing.</p><p class="muted">При открытии через file:// запросы fetch к локальному API могут блокироваться браузером.</p></section>
+    </div>
+  </main><footer class="footer">F1 Paddock · Создано с интересом к гонкам</footer>
+</body></html>

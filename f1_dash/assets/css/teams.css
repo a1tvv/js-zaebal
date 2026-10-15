@@ -1,0 +1,9 @@
+.team-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.team-card { position: relative; min-height: 215px; padding: 22px; border-top: 3px solid var(--team); transition: transform .18s, background .18s; }
+.team-card:hover { transform: translateY(-4px); background: var(--surface-raised); }
+.team-code { color: var(--team); font: 800 46px/1 var(--display); }
+.team-card h2 { margin: 14px 0 4px; font: 700 26px/1 var(--display); text-transform: uppercase; }
+.team-card p { margin: 0; color: var(--muted); }
+.team-drivers { margin-top: 18px; color: #d2d4da; font-size: 13px; }
+@media (max-width: 760px) { .team-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 480px) { .team-grid { grid-template-columns: 1fr; } }

@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Live Timing — F1 Paddock</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/style.css">
+<link rel="stylesheet" href="../assets/css/live.css">
+<style>
+:root{--bg:#0c0d10;--row:#14161b;--row2:#101216;--line:#23262e;--text:#eceff4;--muted:#8b93a1;--s1:#e5484d;--s2:#3b82f6;--s3:#f5c518;--pur:#c77dff;--grn:#3ecf5a}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:400 14px/1.3 Barlow,system-ui,sans-serif}
+.top{display:flex;flex-wrap:wrap;gap:12px 28px;align-items:center;padding:12px 20px;border-bottom:1px solid var(--line)}
+.sess small{display:block;color:var(--muted);font-size:13px}
+.sess b{font:700 24px/1.1 "Barlow Condensed",sans-serif;font-variant-numeric:tabular-nums}
+.flag{font:700 18px "Barlow Condensed",sans-serif;padding:3px 10px;border-radius:5px;margin-left:10px;vertical-align:2px}
+.f-GREEN{background:#1f8f3f}.f-YELLOW{background:#f5c518;color:#111}.f-RED{background:#d62828}
+.f-SC,.f-VSC{background:#f5c518;color:#111}.f-CHEQUERED{background:#eee;color:#111}
+.wx{display:flex;flex-wrap:wrap;gap:6px 22px;margin-left:auto}
+.wx div small{display:block;color:var(--muted);font-size:12px}
+.wx div b{font:600 17px "Barlow Condensed",sans-serif;font-variant-numeric:tabular-nums}
+#note{margin:0;padding:8px 20px;background:#3a2a1c;color:#ffc857}
+main{display:grid;grid-template-columns:minmax(0,1fr) minmax(300px,36%);gap:18px;padding:16px 20px;align-items:start}
+.board{overflow-x:auto}
+.r{display:grid;grid-template-columns:112px 52px 44px 92px 92px 84px 84px minmax(250px,1fr);align-items:center;gap:6px;padding:0 8px;min-width:820px}
+.hd{color:var(--muted);font:500 13px Barlow,sans-serif;height:30px;border-bottom:1px solid var(--line)}
+.row{height:30px;background:var(--row);border-bottom:1px solid var(--bg);cursor:pointer;font-variant-numeric:tabular-nums}
+.row:nth-child(even){background:var(--row2)}
+.row:hover,.row.sel{background:#1f2330}
+.row:focus-visible{outline:2px solid var(--s2);outline-offset:-2px}
+.tag{display:flex;gap:4px}
+.tag b{font:700 16px/22px "Barlow Condensed",sans-serif;height:22px;border-radius:3px;text-align:center}
+.tag .p{width:26px;color:#fff}
+.tag .n{flex:1;border:1.5px solid;background:#0c0d10;letter-spacing:.03em}
+.up{color:var(--grn)}.dn{color:#ff5a5f}.fl{color:var(--muted)}
+.team{display:flex;align-items:center;gap:6px;color:var(--muted);font-size:12px}
+.team i{width:6px;height:18px;border-radius:2px}
+.pit{background:#e5484d;color:#fff;font:700 13px "Barlow Condensed",sans-serif;padding:2px 9px;border-radius:10px;justify-self:start}
+.ov{color:var(--pur)}.pb{color:var(--grn)}
+.ty{display:flex;gap:7px}
+.ty span{display:flex;align-items:center;gap:3px;min-width:34px;color:var(--muted);font-size:13px}
+.ty u{text-decoration:none;width:17px;height:17px;border-radius:50%;border:2.5px solid;font:700 9px/12px "Barlow Condensed",sans-serif;text-align:center;color:var(--text)}
+.ty .e u{border-color:#2a2d35;color:transparent}
+.map{background:#000;border:1px solid var(--line);border-radius:8px;padding:8px;position:sticky;top:12px}
+#map{width:100%;aspect-ratio:1.1;display:block}
+.lg{display:flex;gap:14px;color:var(--muted);font-size:12px;padding:2px 6px}
+.lg i{display:inline-block;width:14px;height:4px;border-radius:2px;margin-right:5px;vertical-align:2px}
+@media (max-width:1000px){main{grid-template-columns:1fr}.map{position:static}}
+</style>
+</head>
+<body>
+<header class="site-header">
+  <a class="brand" href="index.html"><span class="brand-mark">F1</span><span>PADDOCK<span class="brand-sub">RACE CONTROL</span></span></a>
+  <nav class="site-nav" aria-label="Основная навигация">
+    <a href="index.html">Главная</a><a class="active" href="live.html">Live Timing</a><a href="teams.html">Команды</a>
+    <a href="drivers.html">Пилоты</a><a href="calendar.html">Календарь</a><a href="standings.html">Зачёт</a>
+    <a href="telemetry.html">Телеметрия</a><a href="radio.html">Радио</a><a href="history.html">История</a><a href="about.html">О проекте</a>
+  </nav>
+</header>
+<h1 class="visually-hidden">Live Timing — позиции пилотов и время кругов</h1>
+<div class="top">
+  <div class="sess"><small id="gp">Подключение…</small><b id="lapline">–</b><span class="flag" id="flag" hidden></span></div>
+  <div class="wx" id="wx"></div>
+</div>
+<p id="note" hidden></p>
+<main>
+  <div class="board">
+    <div class="r hd"><span>Пилот</span><span>Изм.</span><span>Команда</span><span>Последний круг</span><span>Лучший круг</span><span>Отрыв</span><span>Интервал</span><span>Шины</span></div>
+    <div id="rows"></div>
+  </div>
+  <div class="map">
+    <canvas id="map"></canvas>
+    <div class="lg"><span><i style="background:var(--s1)"></i>Сектор 1</span><span><i style="background:var(--s2)"></i>Сектор 2</span><span><i style="background:var(--s3)"></i>Сектор 3</span></div>
+  </div>
+</main>
+<footer class="footer">F1 Paddock <span>·</span> Live Timing <span>·</span> Демо-данные или ваш C++ API</footer>
+
+<script>
+/* ================= НАСТРОЙКИ БЭКЕНДА ================= */
+const CFG = {
+  API: 'http://localhost:8080/api',
+  POLL_MS: 2000,          // как часто опрашивать
+  MOCK_FALLBACK: true     // если бэк не отвечает - демо-гонка
+};
+/*
+  Контракт (JSON). Правь только api и normalize() ниже, если у тебя другие поля.
+
+  GET /api/session
+    { "name":"Bahrain GP: Race", "flag":"GREEN|YELLOW|RED|SC|VSC|CHEQUERED",
+      "clock":"2:00:00", "lap":1, "totalLaps":56, "trackTime":"16:03:24",
+      "weather":{ "wind":6.8, "windDir":"E", "track":34.1, "air":25.6, "humidity":88.7, "pressure":1006.8, "rain":false } }
+
+  GET /api/standings   (уже отсортировано по позиции)
+    [ { "pos":1, "driver":"VER", "team":"Red Bull", "color":"#3671C6",
+        "diff":0,                       // позиции относительно старта: +2 выиграл, -1 потерял
+        "lastLap":93456, "lastLapFlag":"overall|personal|",   // мс (или строка "1:33.456")
+        "bestLap":92811,
+        "gap":"+3.214", "interval":"+1.002",                  // число (сек) или строка ("LAP 1")
+        "status":"IN PIT|",             // "IN PIT" / "OUT" / ""
+        "tyres":[ {"c":"M","laps":12}, {"c":"H","laps":3} ] } ]  // c: S M H I W
+
+  GET /api/track
+    { "x":[...], "y":[...], "sectors":[120, 260] }   // индексы, где кончаются S1 и S2
+
+  GET /api/positions   (те же координаты, что в /track)
+    [ { "driver":"VER", "x":123.4, "y":-55.2 } ]
+*/
+async function get(p){ const r = await fetch(CFG.API + p); if(!r.ok) throw new Error('HTTP ' + r.status); return r.json(); }
+const api = {
+  session: () => get('/session'), standings: () => get('/standings'),
+  track: () => get('/track'), positions: () => get('/positions')
+};
+
+/* ================= УТИЛИТЫ ================= */
+const $ = s => document.querySelector(s);
+const S = { track:null, sel:null, mock:false, lastStand:[], lastCars:[] };
+const TYRE = { S:'#ff3b3b', M:'#ffd23f', H:'#f2f2f2', I:'#3ecf5a', W:'#3b82f6' };
+const lapStr = v => v == null ? '–' : typeof v === 'string' ? v : Math.floor(v/60000) + ':' + ((v % 60000)/1000).toFixed(3).padStart(6,'0');
+const gapStr = v => v == null ? '–' : typeof v === 'string' ? v : '+' + v.toFixed(3);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+/* ================= РЕНДЕР ================= */
+function renderSession(s){
+  $('#gp').textContent = s.name || 'Сессия';
+  const left = s.totalLaps != null && s.lap != null ? ` (осталось ${Math.max(s.totalLaps - s.lap, 0)})` : '';
+  $('#lapline').textContent = `${s.clock || ''} Круг: ${s.lap ?? '–'}/${s.totalLaps ?? '–'}${left}`;
+  const f = $('#flag'); f.hidden = !s.flag || s.flag === 'GREEN' && false;
+  f.className = 'flag f-' + (s.flag || 'GREEN');
+  f.textContent = ({ GREEN:'Зелёный флаг', YELLOW:'Жёлтый флаг', RED:'Красный флаг', SC:'Машина безопасности', VSC:'Режим VSC', CHEQUERED:'Клетчатый флаг' })[s.flag] || s.flag || '';
+  const w = s.weather || {};
+  const items = [['Время трассы', s.trackTime || '–'], ['Ветер', w.wind != null ? `${w.wind} км/ч ${w.windDir || ''}` : '–'],
+    ['Трасса', w.track != null ? w.track + ' °C' : '–'], ['Воздух', w.air != null ? w.air + ' °C' : '–'],
+    ['Влажность', w.humidity != null ? w.humidity + '%' : '–'], ['Давление', w.pressure != null ? w.pressure + ' мбар' : '–'],
+    ['Дождь', w.rain ? 'Да' : 'Нет']];
+  $('#wx').innerHTML = items.map(([l, v]) => `<div><small>${l}</small><b>${esc(v)}</b></div>`).join('');
+}
+
+function renderRows(rows){
+  S.lastStand = rows;
+  $('#rows').innerHTML = rows.map(r => {
+    const col = r.color || '#888';
+    const diff = r.diff > 0 ? `<span class="up">▲${r.diff}</span>` : r.diff < 0 ? `<span class="dn">▼${-r.diff}</span>` : `<span class="fl">–</span>`;
+    const ty = Array.from({ length:6 }, (_, i) => {
+      const t = (r.tyres || [])[i];
+      return t ? `<span><b style="font-weight:500">${t.laps}</b><u style="border-color:${TYRE[t.c] || '#888'}">${esc(t.c)}</u></span>` : `<span class="e"><b>0</b><u></u></span>`;
+    }).join('');
+    const last = r.status ? `<span class="pit">${esc(r.status)}</span>` : `<span class="${r.lastLapFlag === 'overall' ? 'ov' : r.lastLapFlag === 'personal' ? 'pb' : ''}">${lapStr(r.lastLap)}</span>`;
+    return `<div class="r row${S.sel === r.driver ? ' sel' : ''}" data-d="${esc(r.driver)}" tabindex="0">
+      <div class="tag"><b class="p" style="background:${col}">${r.pos}</b><b class="n" style="color:${col};border-color:${col}">${esc(r.driver)}</b></div>
+      ${diff}<div class="team"><i style="background:${col}"></i>${esc((r.team || '').slice(0, 9))}</div>
+      ${last}<span>${lapStr(r.bestLap)}</span><span>${r.pos === 1 ? '–' : gapStr(r.gap)}</span><span>${r.pos === 1 ? '–' : gapStr(r.interval)}</span>
+      <div class="ty">${ty}</div></div>`;
+  }).join('');
+}
+function pick(e){
+  const el = e.target.closest('.row'); if(!el) return;
+  S.sel = S.sel === el.dataset.d ? null : el.dataset.d;
+  renderRows(S.lastStand); drawMap(S.lastCars);
+}
+$('#rows').addEventListener('click', pick);
+$('#rows').addEventListener('keydown', e => { if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); pick(e); } });
+
+/* ================= КАРТА ================= */
+function drawMap(cars){
+  S.lastCars = cars || [];
+  const cv = $('#map'), w = cv.clientWidth, h = cv.clientHeight, t = S.track;
+  if(!w || !t) return;
+  const dpr = window.devicePixelRatio || 1;
+  cv.width = w * dpr; cv.height = h * dpr;
+  const g = cv.getContext('2d'); g.setTransform(dpr, 0, 0, dpr, 0, 0);
+  const pad = 22, minX = Math.min(...t.x), maxX = Math.max(...t.x), minY = Math.min(...t.y), maxY = Math.max(...t.y);
+  const sc = Math.min((w - 2*pad) / (maxX - minX || 1), (h - 2*pad) / (maxY - minY || 1));
+  const ox = (w - (maxX - minX) * sc) / 2, oy = (h - (maxY - minY) * sc) / 2;
+  const P = (x, y) => [ox + (x - minX) * sc, h - (oy + (y - minY) * sc)];
+  const [a, b] = t.sectors || [Math.floor(t.x.length / 3), Math.floor(t.x.length * 2 / 3)];
+  const n = t.x.length;
+  g.lineCap = 'round'; g.lineJoin = 'round';
+  for(const [w2, alpha] of [[9, 0], [4, 1]]){
+    g.lineWidth = w2;
+    for(let i = 0; i < n; i++){
+      g.strokeStyle = alpha ? (i < a ? '#e5484d' : i < b ? '#3b82f6' : '#f5c518') : '#1c1f27';
+      g.beginPath(); g.moveTo(...P(t.x[i], t.y[i])); g.lineTo(...P(t.x[(i + 1) % n], t.y[(i + 1) % n])); g.stroke();
+    }
+  }
+  const colors = Object.fromEntries(S.lastStand.map(r => [r.driver, r.color || '#888']));
+  g.font = '600 10px Barlow, sans-serif'; g.textAlign = 'center';
+  cars.forEach(c => {
+    const [x, y] = P(c.x, c.y), col = colors[c.driver] || '#888', sel = S.sel === c.driver;
+    g.fillStyle = col; g.strokeStyle = sel ? '#fff' : '#000'; g.lineWidth = sel ? 2.5 : 1.5;
+    g.beginPath(); g.arc(x, y, sel ? 7 : 5, 0, 7); g.fill(); g.stroke();
+    g.fillStyle = '#eceff4'; g.fillText(c.driver, x, y - 10);
+  });
+}
+new ResizeObserver(() => drawMap(S.lastCars)).observe($('#map'));
+
+/* ================= ДЕМО-ГОНКА ================= */
+const GRID = [['VER','Red Bull','#3671C6'],['HAM','Ferrari','#E8002D'],['ANT','Mercedes','#27F4D2'],['LEC','Ferrari','#E8002D'],
+  ['NOR','McLaren','#FF8000'],['PIA','McLaren','#FF8000'],['RUS','Mercedes','#27F4D2'],['HAD','Red Bull','#3671C6'],
+  ['GAS','Alpine','#FF87BC'],['BOR','Audi','#C0392B'],['LAW','Racing Bulls','#6692FF'],['ALO','Aston Martin','#229971'],
+  ['SAI','Williams','#64C4FF'],['STR','Aston Martin','#229971'],['HUL','Audi','#C0392B'],['BEA','Haas','#B6BABD'],
+  ['OCO','Haas','#B6BABD'],['ALB','Williams','#64C4FF'],['BOT','Cadillac','#9AA3AD'],['PER','Cadillac','#9AA3AD'],
+  ['COL','Alpine','#FF87BC'],['LIN','Racing Bulls','#6692FF']];
+const M = { t:0, track:null, d:GRID.map((g, i) => ({ drv:g[0], team:g[1], color:g[2], grid:i + 1, dist:-i * 0.012,
+  base:93 + i * 0.12 + Math.random() * 0.4, last:null, best:null, lastFlag:'' })) };
+(function(){
+  const n = 400, x = [], y = [];
+  for(let i = 0; i < n; i++){ const t = i / n * 2 * Math.PI, r = 1 + 0.28 * Math.cos(3*t + 1) + 0.12 * Math.sin(5*t); x.push(r * Math.cos(t) * 1000); y.push(r * Math.sin(t) * 650); }
+  M.track = { x, y, sectors:[Math.floor(n / 3), Math.floor(n * 2 / 3)] };
+})();
+function mockTick(){
+  const SPEEDUP = 6; M.t += CFG.POLL_MS / 1000 * SPEEDUP;
+  M.d.forEach(d => {
+    const before = Math.floor(d.dist);
+    d.dist += CFG.POLL_MS / 1000 * SPEEDUP / (d.base * (1 + (Math.random() - .5) * .01));
+    if(Math.floor(d.dist) > before && d.dist >= 1){
+      d.last = Math.round(d.base * 1000 * (1 + (Math.random() - .5) * .015));
+      d.lastFlag = d.best == null || d.last < d.best ? 'personal' : '';
+      d.best = d.best == null ? d.last : Math.min(d.best, d.last);
+    }
+  });
+  const order = [...M.d].sort((a, b) => b.dist - a.dist), lead = order[0];
+  const rows = order.map((d, i) => ({ pos:i + 1, driver:d.drv, team:d.team, color:d.color, diff:d.grid - (i + 1),
+    lastLap:d.last, lastLapFlag:d.lastFlag, bestLap:d.best,
+    gap:(lead.dist - d.dist) * lead.base, interval:i ? (order[i - 1].dist - d.dist) * d.base : null,
+    status: lead.dist < 0.2 && d.dist < 0 ? 'IN PIT' : '',
+    tyres:[{ c:'SMH'[d.grid % 3], laps:Math.max(0, Math.floor(d.dist)) }] }));
+  const k = M.track.x.length;
+  const cars = M.d.map(d => { const i = Math.floor(((d.dist % 1) + 1) % 1 * k); return { driver:d.drv, x:M.track.x[i], y:M.track.y[i] }; });
+  const lap = Math.min(56, Math.max(1, Math.floor(lead.dist) + 1)), s = Math.floor(M.t), z = n => String(n).padStart(2, '0');
+  const session = { name:'Демо Гран-при: гонка', flag:'GREEN', clock:`${Math.floor(s / 3600)}:${z(Math.floor(s / 60) % 60)}:${z(s % 60)}`,
+    lap, totalLaps:56, trackTime:new Date().toTimeString().slice(0, 8),
+    weather:{ wind:6.8, windDir:'E', track:34.1, air:25.6, humidity:88.7, pressure:1006.8, rain:false } };
+  return { session, rows, cars };
+}
+
+/* ================= ЦИКЛ ОПРОСА ================= */
+function showNote(t){ const n = $('#note'); n.textContent = t; n.hidden = !t; }
+async function tick(){
+  try {
+    let session, rows, cars;
+    if(S.mock){ ({ session, rows, cars } = mockTick()); }
+    else { [session, rows, cars] = await Promise.all([api.session(), api.standings(), api.positions()]); }
+    renderSession(session); renderRows(rows); drawMap(cars);
+  } catch(e){
+    if(CFG.MOCK_FALLBACK && !S.mock){
+      S.mock = true; S.track = M.track;
+      showNote(`Сервер недоступен по адресу ${CFG.API}. Показана демонстрационная гонка.`);
+      return tick();
+    }
+    showNote(`Ошибка запроса: ${e.message}`);
+  }
+}
+async function init(){
+  try { S.track = await api.track(); }
+  catch(e){ if(!CFG.MOCK_FALLBACK){ showNote(`Сервер недоступен по адресу ${CFG.API}.`); } else { S.mock = true; S.track = M.track; showNote(`Сервер недоступен по адресу ${CFG.API}. Показана демонстрационная гонка.`); } }
+  await tick();
+  setInterval(tick, CFG.POLL_MS);
+}
+init();
+</script>
+</body>
+</html>

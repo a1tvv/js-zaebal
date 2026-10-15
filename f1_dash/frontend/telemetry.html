@@ -1,0 +1,14 @@
+<!doctype html>
+<html lang="ru">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Телеметрия — F1 Paddock</title><link rel="stylesheet" href="../assets/css/style.css"><link rel="stylesheet" href="../assets/css/telemetry.css"></head>
+<body>
+  <header class="site-header"><a class="brand" href="index.html"><span class="brand-mark">F1</span><span>PADDOCK<span class="brand-sub">RACE CONTROL</span></span></a><nav class="site-nav" aria-label="Основная навигация"><a href="index.html">Главная</a><a href="live.html">Live Timing</a><a href="teams.html">Команды</a><a href="drivers.html">Пилоты</a><a href="calendar.html">Календарь</a><a href="standings.html">Зачёт</a><a class="active" href="telemetry.html">Телеметрия</a><a href="radio.html">Радио</a><a href="history.html">История</a><a href="about.html">О проекте</a></nav></header>
+  <main class="container section"><span class="eyebrow">Быстрее. Точнее. На пределе.</span><h1 class="page-title">Телеметрия</h1><p class="muted">Сравнение скорости и темпа на примере одного круга.</p>
+    <div class="telemetry-grid" style="margin-top:28px">
+      <section class="card chart-card"><h2>Скорость · км/ч</h2><div class="chart-wrap"><canvas id="speedChart" aria-label="График скорости по дистанции круга"></canvas></div></section>
+      <section class="card chart-card"><h2>Темп по секторам · секунды</h2><div class="chart-wrap"><canvas id="sectorChart" aria-label="Сравнение времени прохождения секторов"></canvas></div></section>
+    </div>
+    <p class="telemetry-note">Графики построены на демонстрационных данных. Chart.js подключается напрямую через CDN; точки можно заменить данными вашего API.</p>
+  </main><footer class="footer">F1 Paddock · Телеметрия</footer>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script><script src="../assets/js/telemetry.js"></script>
+</body></html>

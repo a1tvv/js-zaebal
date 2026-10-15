@@ -1,0 +1,10 @@
+.history-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.legend-card { min-height: 220px; padding: 22px; }
+.legend-era { color: var(--orange); font-size: 12px; font-weight: 700; letter-spacing: .1em; }
+.legend-card h2 { margin: 11px 0 7px; font: 700 27px/1 var(--display); text-transform: uppercase; }
+.record-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+.record-card { padding: 18px; }
+.record-value { display: block; color: var(--red); font: 800 38px/1 var(--display); }
+.record-card p { margin: 8px 0 0; color: var(--muted); font-size: 13px; }
+@media(max-width: 760px) { .history-grid { grid-template-columns: 1fr 1fr; }.record-grid { grid-template-columns: 1fr 1fr; } }
+@media(max-width: 480px) { .history-grid { grid-template-columns: 1fr; } }
