@@ -7,8 +7,27 @@
     <div class="about-grid" style="margin-top:28px">
       <section class="card about-panel"><h2>Задача</h2><p>Показать, что многополосный сайт с интерактивным Live Timing можно собрать на обычных веб-технологиях. Статические страницы отображают материалы о сезоне, а live-раздел получает обновления с HTTP API.</p><p class="muted">Серверная часть на C++ остаётся отдельным компонентом и отвечает за выдачу JSON.</p><div class="about-callout">Главная фишка — гоночная таблица с позициями, погодой, состоянием трассы и схемой круга.</div></section>
       <section class="card about-panel"><h2>Технологии</h2><ul class="stack-list"><li>Разметка <span>HTML5</span></li><li>Стили <span>CSS Grid + Flexbox</span></li><li>Интерактивность <span>Vanilla JavaScript</span></li><li>Графики <span>Chart.js CDN</span></li><li>Данные гонки <span>Fetch API + JSON</span></li><li>Сервер <span>C++ HTTP API</span></li></ul></section>
-      <section class="card about-panel"><h2>Автор</h2><p>Студенческий проект</p><p class="muted">Добавь здесь своё имя, группу и контактные данные перед защитой проекта.</p></section>
+      <section class="card about-panel">
+        <h2>Автор</h2>
+        <form class="contact-form" id="contactForm" novalidate>
+          <label for="contactName">Имя и фамилия</label>
+          <input id="contactName" name="name" autocomplete="name" required>
+
+          <label for="contactGroup">Группа</label>
+          <input id="contactGroup" name="group" required>
+
+          <label for="contactEmail">Email (например, Gmail)</label>
+          <input id="contactEmail" name="email" type="email" autocomplete="email" required>
+
+          <label for="contactPhone">Телефон</label>
+          <input id="contactPhone" name="phone" type="tel" autocomplete="tel" placeholder="+7 700 123-45-67" required>
+
+          <button class="contact-submit" type="submit">Проверить контакты</button>
+          <p class="contact-status" id="contactStatus" role="status" aria-live="polite"></p>
+        </form>
+      </section>
       <section class="card about-panel"><h2>Запуск локально</h2><p>Открой папку проекта в редакторе и запусти статический сервер (например, Live Server). Чтобы проверить обновление данных, подключи C++ API и укажи его адрес в Live Timing.</p><p class="muted">При открытии через file:// запросы fetch к локальному API могут блокироваться браузером.</p></section>
     </div>
   </main><footer class="footer">F1 Paddock · Создано с интересом к гонкам</footer>
+  <script src="../assets/js/about.js"></script>
 </body></html>
