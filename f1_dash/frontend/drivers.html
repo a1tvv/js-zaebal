@@ -3,21 +3,19 @@
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Пилоты — F1 Paddock</title><link rel="stylesheet" href="../assets/css/style.css"><link rel="stylesheet" href="../assets/css/drivers.css"></head>
 <body>
   <header class="site-header"><a class="brand" href="index.html"><span class="brand-mark">F1</span><span>PADDOCK<span class="brand-sub">RACE CONTROL</span></span></a><nav class="site-nav" aria-label="Основная навигация"><a href="index.html">Главная</a><a href="live.html">Live Timing</a><a href="teams.html">Команды</a><a class="active" href="drivers.html">Пилоты</a><a href="calendar.html">Календарь</a><a href="standings.html">Зачёт</a><a href="telemetry.html">Телеметрия</a><a href="radio.html">Радио</a><a href="history.html">История</a><a href="about.html">О проекте</a></nav></header>
-  <main class="container section"><span class="eyebrow">Героев определяют миллисекунды</span><h1 class="page-title">Пилоты сезона</h1><p class="muted">Знакомься с составами команд. Карточки используют стилизованные номера вместо официальных портретов.</p>
-    <div class="driver-grid" style="margin-top:28px">
-      <article class="card driver-card"><div class="driver-photo" style="--team:#3671c6">1</div><div class="driver-info"><span class="driver-number">01</span><h2>Макс Ферстаппен</h2><span class="driver-team">Red Bull Racing · Нидерланды</span><div class="driver-stat"><span>Чемпионские титулы</span><b>4</b></div></div></article>
-      <article class="card driver-card"><div class="driver-photo" style="--team:#e8002d">16</div><div class="driver-info"><span class="driver-number">16</span><h2>Шарль Леклер</h2><span class="driver-team">Ferrari · Монако</span><div class="driver-stat"><span>Гран-при</span><b>150+</b></div></div></article>
-      <article class="card driver-card"><div class="driver-photo" style="--team:#ff8000">4</div><div class="driver-info"><span class="driver-number">04</span><h2>Ландо Норрис</h2><span class="driver-team">McLaren · Великобритания</span><div class="driver-stat"><span>Победы</span><b>10+</b></div></div></article>
-      <article class="card driver-card"><div class="driver-photo" style="--team:#27f4d2">12</div><div class="driver-info"><span class="driver-number">12</span><h2>Кими Антонелли</h2><span class="driver-team">Mercedes · Италия</span><div class="driver-stat"><span>Дебют в F1</span><b>2025</b></div></div></article>
-      <article class="card driver-card"><div class="driver-photo" style="--team:#e8002d">44</div><div class="driver-info"><span class="driver-number">44</span><h2>Льюис Хэмилтон</h2><span class="driver-team">Ferrari · Великобритания</span><div class="driver-stat"><span>Чемпионские титулы</span><b>7</b></div></div></article>
-      <article class="card driver-card"><div class="driver-photo" style="--team:#ff8000">81</div><div class="driver-info"><span class="driver-number">81</span><h2>Оскар Пиастри</h2><span class="driver-team">McLaren · Австралия</span><div class="driver-stat"><span>Гран-при</span><b>50+</b></div></div></article>
-      <article class="card driver-card"><div class="driver-photo" style="--team:#27f4d2">63</div><div class="driver-info"><span class="driver-number">63</span><h2>Джордж Расселл</h2><span class="driver-team">Mercedes · Великобритания</span><div class="driver-stat"><span>Победы</span><b>5+</b></div></div></article>
-      <article class="card driver-card"><div class="driver-photo" style="--team:#229971">14</div><div class="driver-info"><span class="driver-number">14</span><h2>Фернандо Алонсо</h2><span class="driver-team">Aston Martin · Испания</span><div class="driver-stat"><span>Чемпионские титулы</span><b>2</b></div></div></article>
-      <article class="card driver-card"><div class="driver-photo" style="--team:#64c4ff">55</div><div class="driver-info"><span class="driver-number">55</span><h2>Карлос Сайнс</h2><span class="driver-team">Williams · Испания</span><div class="driver-stat"><span>Победы</span><b>4</b></div></div></article>
-      <article class="card driver-card"><div class="driver-photo" style="--team:#3671c6">6</div><div class="driver-info"><span class="driver-number">06</span><h2>Исак Хаджар</h2><span class="driver-team">Red Bull Racing · Франция</span><div class="driver-stat"><span>Дебют в F1</span><b>2025</b></div></div></article>
-      <article class="card driver-card"><div class="driver-photo" style="--team:#9aa3ad">11</div><div class="driver-info"><span class="driver-number">11</span><h2>Серхио Перес</h2><span class="driver-team">Cadillac · Мексика</span><div class="driver-stat"><span>Победы</span><b>6</b></div></div></article>
-      <article class="card driver-card"><div class="driver-photo" style="--team:#9aa3ad">77</div><div class="driver-info"><span class="driver-number">77</span><h2>Валттери Боттас</h2><span class="driver-team">Cadillac · Финляндия</span><div class="driver-stat"><span>Победы</span><b>10</b></div></div></article>
-    </div>
+  <main class="container section"><span class="eyebrow">Героев определяют миллисекунды</span><h1 class="page-title">Пилоты сезона</h1><p class="muted">Знакомься с составами команд. Нажми на карточку, чтобы открыть подробности о пилоте.</p>
+    <!-- List: карточки рисует функция list() из drivers.js по данным assets/data/drivers.json -->
+    <div class="driver-grid" id="driverList" style="margin-top:28px"></div>
   </main><footer class="footer">F1 Paddock · Статистика приведена для примера</footer>
+
+  <!-- Detail: подробности о пилоте, заполняет функция detail() -->
+  <dialog class="site-modal driver-modal" id="driverModal" aria-labelledby="driverModalTitle">
+    <div class="site-modal-body">
+      <button class="site-modal-close" id="driverModalClose" type="button" aria-label="Закрыть">×</button>
+      <div id="driverDetail"></div>
+    </div>
+  </dialog>
+
   <script src="../assets/js/modal.js"></script>
+  <script src="../assets/js/drivers.js"></script>
 </body></html>
